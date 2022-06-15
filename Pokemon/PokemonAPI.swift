@@ -10,7 +10,7 @@ import Foundation
 class PokemonAPI {
     static let shared = PokemonAPI()
     
-    func fetchPokemon() {
+    func fetchPokemon(onCompletion: @escaping ([Pokemon]) -> ()) {
         let urlString = "https://pokeapi.co/api/v2/pokemon?limit=1126"
         let url = URL(string: urlString)!
         
@@ -26,6 +26,7 @@ class PokemonAPI {
             }
             
             print(pokemonList)
+            onCompletion(pokemonList.results)
         }
         task.resume()
     }

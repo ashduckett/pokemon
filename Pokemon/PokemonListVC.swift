@@ -11,7 +11,7 @@ class PokemonListVC: UIViewController {
     var safeArea: UILayoutGuide!
     let searchBar = UISearchBar()
     let tableView = UITableView()
-    let pokemonList = ["p1", "p2", "p3"]
+    var pokemonList = [Pokemon]()
     
     override func viewDidLoad() {
         // This doesn't appear to work. Why not?
@@ -20,7 +20,17 @@ class PokemonListVC: UIViewController {
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellid")
         setupView()
-        PokemonAPI.shared.fetchPokemon()
+        
+        let anonymousFunction = { (fetchedPokemonList: [Pokemon]) in
+            DispatchQueue.main.async {
+                self.pokemonList = fetchedPokemonList
+                self.tableView.reloadData()
+            }
+            
+            
+        }
+        
+        PokemonAPI.shared.fetchPokemon(onCompletion: anonymousFunction)
     }
     
     // MARK: - Setup View
@@ -53,9 +63,9 @@ extension PokemonListVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellid", for: indexPath)
-        let name = pokemonList[indexPath.row]
+        let pokemon = pokemonList[indexPath.row]
         
-        cell.textLabel?.text = name
+        cell.textLabel?.text = pokemon.name
         return cell
     }
     
