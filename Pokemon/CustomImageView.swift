@@ -7,9 +7,31 @@
 
 import UIKit
 
+let imageCache = NSCache<AnyObject, AnyObject>()
+
 class CustomImageView: UIImageView {
+    var task: URLSessionDataTask!
+    
     func loadImage(from url: URL) {
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+        // Ensure we don't display any old images before we load a new one when scrolling
+        image = nil
+        
+        // Brand new cells won't have a task to cancel, but if it's been initialised we'll want to cancel the previous
+        // task to avoid repeating requests resulting in images being shown one after another
+        if let task = task {
+            task.cancel()
+        }
+        
+        // If the image is in the image cache, keyed by url, then use that
+        if let imageFromCache = imageCache.object(forKey: url.absoluteString as AnyObject) as? UIImage {
+            self.image = imageFromCache
+            
+            // Return here so we don't try to perform an HTTP request to get the image
+            return
+        }
+        
+        
+        task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard
                 let data = data,
                 let newImage = UIImage(data: data)
@@ -18,6 +40,8 @@ class CustomImageView: UIImageView {
                 return
             }
         
+            imageCache.setObject(newImage, forKey: url.absoluteString as AnyObject)
+            
             DispatchQueue.main.async {
                 self.image = newImage
             }

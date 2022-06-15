@@ -10,7 +10,7 @@ import UIKit
 
 class PokemonCell: UITableViewCell {
     var safeArea: UILayoutGuide!
-    let imageIV = UIImageView()
+    let imageIV = CustomImageView()
     let nameLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -37,7 +37,6 @@ class PokemonCell: UITableViewCell {
         imageIV.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         imageIV.widthAnchor.constraint(equalToConstant: 40).isActive = true
         imageIV.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        imageIV.backgroundColor = .red
     }
     
     func setupNameLabel() {

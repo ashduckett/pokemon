@@ -70,6 +70,16 @@ extension PokemonListVC: UITableViewDataSource {
         }
         
         pokemonCell.nameLabel.text = pokemon.name
+        
+        // Get hold of the id for the current pokemon
+        if let url = URL(string: pokemon.url) {
+            // Get the id from the url
+            let id = url.lastPathComponent
+            let imageUrl = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(id).png")!
+            pokemonCell.imageIV.loadImage(from: imageUrl)
+            
+        }
+        
         return cell
     }
     
