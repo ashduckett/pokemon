@@ -12,6 +12,7 @@ class PokemonListVC: UIViewController {
     let searchBar = UISearchBar()
     let tableView = UITableView()
     var pokemonList = [Pokemon]()
+    var filteredPokemon = [Pokemon]()
     
     override func viewDidLoad() {
         // This doesn't appear to work. Why not?
@@ -19,12 +20,14 @@ class PokemonListVC: UIViewController {
         safeArea = view.layoutMarginsGuide
         tableView.dataSource = self
         tableView.delegate = self
+        searchBar.delegate = self
         tableView.register(PokemonCell.self, forCellReuseIdentifier: "cellid")
         setupView()
         
         let anonymousFunction = { (fetchedPokemonList: [Pokemon]) in
             DispatchQueue.main.async {
                 self.pokemonList = fetchedPokemonList
+                self.filteredPokemon = self.pokemonList
                 self.tableView.reloadData()
             }
         }
@@ -57,12 +60,12 @@ class PokemonListVC: UIViewController {
 // MARK: - UITableViewDataSource
 extension PokemonListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return pokemonList.count
+        return filteredPokemon.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellid", for: indexPath)
-        let pokemon = pokemonList[indexPath.row]
+        let pokemon = filteredPokemon[indexPath.row]
         
         guard let pokemonCell = cell as? PokemonCell else {
             return cell
@@ -82,7 +85,7 @@ extension PokemonListVC: UITableViewDataSource {
         return cell
     }
 }
-
+// MARK: - UITableViewDelegate
 extension PokemonListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
@@ -99,3 +102,12 @@ extension PokemonListVC: UITableViewDelegate {
     }
 }
 
+// MARK: - UISearchBarDelegate
+extension PokemonListVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredPokemon = searchText.isEmpty ? pokemonList : pokemonList.filter { (item: Pokemon) -> Bool in
+            return item.name.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        }
+        tableView.reloadData()
+    }
+}
