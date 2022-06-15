@@ -13,7 +13,9 @@ class PokemonVC: UIViewController {
     var safeArea: UILayoutGuide!
     let imageIV = CustomImageView()
     let nameLabel = UILabel()
+    let statsLabel = UILabel()
     let dismissButton = UIButton()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +24,8 @@ class PokemonVC: UIViewController {
         setupImage()
         setupName()
         setupCloseButton()
+        setupStatsLabel()
         setupData()
-        
     }
     
     func setupImage() {
@@ -32,8 +34,22 @@ class PokemonVC: UIViewController {
         imageIV.contentMode = .scaleAspectFit
         imageIV.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageIV.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 50).isActive = true
-        imageIV.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.5).isActive = true
+        imageIV.widthAnchor.constraint(equalTo: safeArea.widthAnchor, multiplier: 0.3).isActive = true
         imageIV.heightAnchor.constraint(equalTo: imageIV.heightAnchor).isActive = true
+    }
+    
+    func setupStatsLabel() {
+        view.addSubview(statsLabel)
+        statsLabel.translatesAutoresizingMaskIntoConstraints = false
+//        statsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        statsLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5).isActive = true
+        statsLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 5).isActive = true
+        statsLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: 5).isActive = true
+        statsLabel.textColor = .white
+        statsLabel.lineBreakMode = .byWordWrapping
+        statsLabel.numberOfLines = 0
+//        statsLabel.adjustsFontSizeToFitWidth = true
+        statsLabel.textAlignment = .center
     }
     
     func setupName() {
@@ -49,6 +65,15 @@ class PokemonVC: UIViewController {
         if let stats = stats, let url = URL(string: stats.sprites.frontDefault) {
             imageIV.loadImage(from: url)
             nameLabel.text = stats.name
+            var statText = ""
+            
+            for (index, ability) in stats.abilities.enumerated() {
+                statText += (index > 0 ? ", " : "") + "\(ability.ability.name)"
+            }
+                
+                
+            
+            statsLabel.text = "This Pokemon is a \(stats.species.name) and has the following abilities: \(statText)."
         }
     }
     
