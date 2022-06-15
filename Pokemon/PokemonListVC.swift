@@ -10,6 +10,7 @@ import UIKit
 class PokemonListVC: UIViewController {
     var safeArea: UILayoutGuide!
     let searchBar = UISearchBar()
+    let tableView = UITableView()
     
     override func viewDidLoad() {
         // This doesn't appear to work. Why not?
@@ -23,6 +24,12 @@ class PokemonListVC: UIViewController {
         searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
