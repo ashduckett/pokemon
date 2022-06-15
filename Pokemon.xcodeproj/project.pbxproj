@@ -14,6 +14,7 @@
 		5E224AD1285A062200FE4438 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E224ACF285A062200FE4438 /* LaunchScreen.storyboard */; };
 		5E224AD9285A1F3900FE4438 /* PokemonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E224AD8285A1F3900FE4438 /* PokemonAPI.swift */; };
 		5E224ADB285A288500FE4438 /* PokemonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E224ADA285A288500FE4438 /* PokemonCell.swift */; };
+		5E224ADD285A30A600FE4438 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E224ADC285A30A600FE4438 /* CustomImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		5E224AD2285A062200FE4438 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E224AD8285A1F3900FE4438 /* PokemonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAPI.swift; sourceTree = "<group>"; };
 		5E224ADA285A288500FE4438 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
+		5E224ADC285A30A600FE4438 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				5E224AD2285A062200FE4438 /* Info.plist */,
 				5E224AD8285A1F3900FE4438 /* PokemonAPI.swift */,
 				5E224ADA285A288500FE4438 /* PokemonCell.swift */,
+				5E224ADC285A30A600FE4438 /* CustomImageView.swift */,
 			);
 			path = Pokemon;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E224ADB285A288500FE4438 /* PokemonCell.swift in Sources */,
+				5E224ADD285A30A600FE4438 /* CustomImageView.swift in Sources */,
 				5E224AC9285A062100FE4438 /* PokemonListVC.swift in Sources */,
 				5E224AC5285A062100FE4438 /* AppDelegate.swift in Sources */,
 				5E224AD9285A1F3900FE4438 /* PokemonAPI.swift in Sources */,
