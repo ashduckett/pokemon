@@ -11,13 +11,20 @@ class PokemonListVC: UIViewController {
     var safeArea: UILayoutGuide!
     let searchBar = UISearchBar()
     let tableView = UITableView()
+    let pokemonList = ["p1", "p2", "p3"]
     
     override func viewDidLoad() {
         // This doesn't appear to work. Why not?
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
-        
-        
+        tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellid")
+        setupView()
+        PokemonAPI.shared.fetchPokemon()
+    }
+    
+    // MARK: - Setup View
+    func setupView() {
         view.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
@@ -31,12 +38,28 @@ class PokemonListVC: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
     }
-    
+     
     override func viewDidAppear(_ animated: Bool) {
         view.backgroundColor = .white
         
     }
+}
 
-
+// MARK: - UITableViewDataSource
+extension PokemonListVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return pokemonList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellid", for: indexPath)
+        let name = pokemonList[indexPath.row]
+        
+        cell.textLabel?.text = name
+        return cell
+    }
+    
+    
+    
 }
 
