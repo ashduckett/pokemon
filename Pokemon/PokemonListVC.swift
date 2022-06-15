@@ -18,7 +18,7 @@ class PokemonListVC: UIViewController {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellid")
+        tableView.register(PokemonCell.self, forCellReuseIdentifier: "cellid")
         setupView()
         
         let anonymousFunction = { (fetchedPokemonList: [Pokemon]) in
@@ -65,7 +65,11 @@ extension PokemonListVC: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellid", for: indexPath)
         let pokemon = pokemonList[indexPath.row]
         
-        cell.textLabel?.text = pokemon.name
+        guard let pokemonCell = cell as? PokemonCell else {
+            return cell
+        }
+        
+        pokemonCell.nameLabel.text = pokemon.name
         return cell
     }
     
