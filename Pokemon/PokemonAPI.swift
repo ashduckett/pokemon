@@ -30,6 +30,54 @@ class PokemonAPI {
         }
         task.resume()
     }
+    
+    func fetchPokemonStats(urlString: String, onCompletion: @escaping (PokemonStats) -> ()) {
+        let url = URL(string: urlString)!
+        print(url)
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                print("Could not get data when fetching Pokemon Stats")
+                return
+            }
+            
+            guard let pokemonStats = try? JSONDecoder().decode(PokemonStats.self, from: data) else {
+                print("Could not decode Pokemon Stats JSON")
+                return
+            }
+            
+            print(pokemonStats)
+            onCompletion(pokemonStats)
+        }
+        task.resume()
+    }
+}
+
+struct PokemonStats: Codable {
+    let name: String
+    let height: Int
+    let abilities: [PokemonAbility]
+    let species: Species
+    let sprites: Sprites
+}
+
+struct Species: Codable {
+    let name: String
+}
+
+struct Sprites: Codable {
+    let frontDefault: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case frontDefault = "front_default"
+    }
+}
+
+struct PokemonAbility: Codable {
+    let ability: BasePokemonAbility
+}
+
+struct BasePokemonAbility: Codable {
+    let name: String
 }
 
 struct PokemonList: Codable {

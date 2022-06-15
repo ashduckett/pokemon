@@ -18,6 +18,7 @@ class PokemonListVC: UIViewController {
         view.backgroundColor = .white
         safeArea = view.layoutMarginsGuide
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(PokemonCell.self, forCellReuseIdentifier: "cellid")
         setupView()
         
@@ -26,8 +27,6 @@ class PokemonListVC: UIViewController {
                 self.pokemonList = fetchedPokemonList
                 self.tableView.reloadData()
             }
-            
-            
         }
         
         PokemonAPI.shared.fetchPokemon(onCompletion: anonymousFunction)
@@ -82,8 +81,31 @@ extension PokemonListVC: UITableViewDataSource {
         
         return cell
     }
-    
-    
-    
+}
+
+extension PokemonListVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // I want to get the stats for the current Pokemon to be able to pass them on to the VC that needs to display them
+        var stats: PokemonStats?
+        
+        let anonymousFunction = { (fetchedPokemonStats: PokemonStats) in
+            stats = fetchedPokemonStats
+
+            
+           
+            
+            DispatchQueue.main.async {
+                let pokemonDetailVC = PokemonVC()
+                pokemonDetailVC.stats = fetchedPokemonStats
+                pokemonDetailVC.modalPresentationStyle = .fullScreen
+                self.present(pokemonDetailVC, animated: true)
+                
+            }
+            
+        }
+        
+        PokemonAPI.shared.fetchPokemonStats(urlString: pokemonList[indexPath.row].url, onCompletion: anonymousFunction)
+        
+    }
 }
 
