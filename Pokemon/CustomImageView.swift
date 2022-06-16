@@ -13,8 +13,10 @@ class CustomImageView: UIImageView {
     var task: URLSessionDataTask!
     
     func loadImage(from url: URL) {
-        // Ensure we don't display any old images before we load a new one when scrolling
+        // Ensure we don't display any old images before we load a new one when scrolling by killing any possibly running image loading tasks
         image = nil
+        
+        // At this stage we know we should be loading an image so add the spinner
         addSpinner()
         
         // Brand new cells won't have a task to cancel, but if it's been initialised we'll want to cancel the previous
@@ -31,23 +33,28 @@ class CustomImageView: UIImageView {
             return
         }
         
-        
+        // If we don't currently have an image then request one based on the URL passed in when
+        // calling this method
         task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            // Ensure we can get hold of the data and if we can't then bail. If we can, then store it
             guard
                 let data = data,
                 let newImage = UIImage(data: data)
             else {
-                print("Could not load image from url: \(url)")
                 return
             }
-        
+            
+            // ...so that we can cache it so we won't need to do the request the next time
             imageCache.setObject(newImage, forKey: url.absoluteString as AnyObject)
             
             DispatchQueue.main.async {
+                // ...and so that we can set the image on the image view and remove the loading spinner
                 self.image = newImage
                 self.removeSpinner()
             }
         }
+        
+        // Start this task
         task.resume()
     }
     
